@@ -20,7 +20,7 @@ class model extends \PDO
     public function __construct($tableName)
     {
         $database=conf::get('database');
-        $dsn='mysql:host='.$database['DB_HOST'].';port='.$database['DB_PORT'].';dbname='.$database['DB_NAME'];
+        $dsn='mysql:host='.$database['DB_HOST'].';port='.$database['DB_PORT'].';dbname='.$database['DB_NAME'].';charset=UTF8';
         $username=$database['DB_USERNAME'];
         $passwd=$database['DB_PASSWORD'];
         $options=$database['DB_OPTIONS'];
@@ -48,6 +48,25 @@ class model extends \PDO
     }
 
     /**
+     * 查询单条数据
+     * @return array 成功返回数组，失败返回空数组
+     */
+    public function find()
+    {
+        $sql = "select {$this->field} from {$this->tableName} {$this->where} limit 1";
+        $this->sql = $sql;
+        //执行SQL,结果集是一个对象
+        $res = $this->query($sql);
+        //判断是否查询成功,
+        if ($res){
+            //成功返回二维数组,索引为列名
+            return $res->fetch(\PDO::FETCH_ASSOC);
+        }
+        //失败返回空数组
+        return [];
+    }
+
+    /**
      * 查询多条数据
      * @return array 成功返回二维数组，失败返回空数组
      */
@@ -64,6 +83,20 @@ class model extends \PDO
         }
         //失败返回空数组
         return [];
+    }
+
+    public function count(){
+        $sql = "select count(*) from {$this->tableName} {$this->where} limit 1";
+        $this->sql = $sql;
+        //执行SQL,结果集是一个对象
+        $res = $this->query($sql);
+        //判断是否查询成功,
+        if ($res){
+            //成功返回二维数组,索引为列名
+            return $res->fetch(\PDO::FETCH_ASSOC)['count(*)'];
+        }
+        //失败返回空数组
+        return 0;
     }
 
     /**
