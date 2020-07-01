@@ -9,8 +9,10 @@ class route
     public $action='index';//方法
     public function __construct()
     {
-        if(isset($_SERVER['REDIRECT_URL'])&&$_SERVER['REDIRECT_URL']!='/'){
-            $url=explode('/',trim($_SERVER['REDIRECT_URL'],'/'));
+        $pre='/[?,=,&]+/';//将问号，与号，等于号转成斜杆
+        $s=preg_replace($pre,'/',urldecode($_SERVER['REQUEST_URI']));
+        if(isset($s)&&$s!='/'){
+            $url=explode('/',trim($s,'/'));
             //解析出模块名
             if(isset($url[0])){
                 $this->module=$url[0];
@@ -18,7 +20,7 @@ class route
             }
             //解析出控制器名
             if(isset($url[1])){
-                $this->controller=$url[1];                unset($url[0]);
+                $this->controller=$url[1];
                 unset($url[1]);
             }
             //解析出方法名
