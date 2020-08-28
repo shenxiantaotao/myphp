@@ -2,6 +2,8 @@
 
 namespace heart;
 //路由文件
+use heart\log\log;
+
 class route
 {
     public $module='index';//模块
@@ -9,15 +11,10 @@ class route
     public $action='index';//方法
     public function __construct()
     {
-<<<<<<< HEAD
-        if(isset($_SERVER['REQUEST_URI'])&&$_SERVER['REQUEST_URI']!='/'){
-            $url=explode('/',trim($_SERVER['REQUEST_URI'],'/'));
-=======
         $pre='/[?,=,&]+/';//将问号，与号，等于号转成斜杆
         $s=preg_replace($pre,'/',urldecode($_SERVER['REQUEST_URI']));
         if(isset($s)&&$s!='/'){
             $url=explode('/',trim($s,'/'));
->>>>>>> master
             //解析出模块名
             if(isset($url[0])){
                 $this->module=$url[0];

@@ -1,6 +1,8 @@
 <?php
 
 namespace heart;
+use heart\log\log;
+
 class start
 {
     public static $class_map=[];//存储加载的类
@@ -13,6 +15,8 @@ class start
         $class_file=APP.'/'.$module.'/'.CONTROLLER.'/'.$controller.'.php';
         $class_action='\\'.APP_NAME.'\\'.$module.'\\'.CONTROLLER.'\\'.$controller;
         if(is_file($class_file)){
+            log::log('REQUEST_ACTION='.$class_file.'->'.$action);//写入调用控制器的日志
+            log::log('REQUEST_METHOD='.$_SERVER['REQUEST_METHOD'].'---REQUEST_PARAM='.print_r($_REQUEST,1));//请求参数
             include $class_file;
             (new $class_action())->$action();
         }
